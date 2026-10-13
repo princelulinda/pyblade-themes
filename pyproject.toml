@@ -1,13 +1,13 @@
 [project]
 name = "pyblade-themes"
 version = "0.1.0"
-description = "A theme generator for PyBlade UI, built with Django, PyBlade and PyBlade UI."
+description = "A theme editor for PyBlade UI, built with Django, PyBlade and PyBlade UI."
 requires-python = ">=3.12"
 dependencies = [
     "django>=6.1",
     "pyblade>=0.3.0",
-    "pyblade-ui",
+    "pyblade-ui>=0.2.0",
+    "psycopg[binary]>=3.2",
 ]
 
-[tool.uv.sources]
-pyblade-ui = { path = "../pyblade-ui", editable = true }
+# To work on the library at the same time: uv pip install -e ../pyblade-ui

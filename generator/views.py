@@ -1,6 +1,8 @@
 import json
 
-from django.http import HttpResponse, JsonResponse
+from django.conf import settings
+
+from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_GET, require_POST
@@ -28,6 +30,7 @@ def editor_page(request, lang, theme, preset="", shared=None):
         "pairs": CONTRAST_PAIRS,
         "shared": shared,
         "default_shadow": DEFAULT_SHADOW,
+        "sharing": settings.SHARING_ENABLED,
         "lang": lang,
         "t": t["js"],
     }
@@ -60,6 +63,8 @@ def editor(request, lang="fr"):
 
 @ensure_csrf_cookie
 def shared(request, slug, lang="fr"):
+    if not settings.SHARING_ENABLED:
+        raise Http404
     saved = get_object_or_404(SavedTheme, slug=slug)
     info = {"slug": saved.slug, "name": saved.name, "url": saved.get_absolute_url(), "css": f"/t/{saved.slug}.css"}
     return editor_page(request, lang, saved.theme, shared=info)
@@ -67,6 +72,8 @@ def shared(request, slug, lang="fr"):
 
 def shared_css(request, slug):
     """A saved theme's theme.css: what a future `pyblade-ui theme add <url>` would fetch."""
+    if not settings.SHARING_ENABLED:
+        raise Http404
     saved = get_object_or_404(SavedTheme, slug=slug)
     return HttpResponse(saved.theme.stylesheet, content_type="text/css; charset=utf-8")
 
@@ -95,6 +102,8 @@ def api_export(request):
 @require_POST
 def api_save(request):
     """Saves the theme being edited and returns its short link."""
+    if not settings.SHARING_ENABLED:
+        return JsonResponse({"error": "Saving is not available here: no database is configured."}, status=503)
     data = _payload(request)
     theme = EditorTheme.from_payload(data.get("theme") or {})
     name = str(data.get("name", ""))[:60].strip()

@@ -118,3 +118,18 @@ class PageAndApiTests(TestCase):
         client = Client(enforce_csrf_checks=True)
         response = client.post("/api/themes", "{}", content_type="application/json")
         self.assertEqual(response.status_code, 403)
+
+
+class WithoutDatabaseTests(TestCase):
+    """On Vercel without DATABASE_URL, the editor works and saving is turned off cleanly."""
+
+    def test_saving_is_off_without_a_database(self):
+        from django.test import override_settings
+
+        with override_settings(SHARING_ENABLED=False):
+            html = self.client.get("/").content.decode()
+            self.assertNotIn("dialog-open', 'save'", html)
+            response = self.client.post("/api/themes", "{}", content_type="application/json")
+            self.assertEqual(response.status_code, 503)
+            self.assertEqual(self.client.get("/t/anything/").status_code, 404)
+            self.assertEqual(self.client.post("/api/export", "{}", content_type="application/json").status_code, 200)

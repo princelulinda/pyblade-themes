@@ -5,3 +5,5 @@ node_modules/
 db.sqlite3
 /staticfiles/
 .env*
+.vercel
+.env.local

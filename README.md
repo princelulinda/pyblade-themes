@@ -51,3 +51,23 @@ Les valeurs reçues sont validées : seules les variables connues et des couleur
 ```bash
 uv run python manage.py test generator
 ```
+
+## Mettre en ligne sur Vercel
+
+Vercel reconnaît le projet Django tout seul (`manage.py`, `WSGI_APPLICATION`), installe les dépendances depuis `uv.lock` et lance `collectstatic` (les fichiers statiques sont servis par son CDN). `static/css/app.css` est commité : relancez `npm run css` avant de committer un changement de style.
+
+Variables d'environnement du projet Vercel :
+
+| Variable | Rôle |
+|---|---|
+| `DJANGO_SECRET_KEY` | La clé secrète de Django. À définir (une longue chaîne aléatoire). |
+| `DATABASE_URL` | Une base PostgreSQL (Neon, Supabase… via le Marketplace Vercel). Sans elle, l'éditeur fonctionne mais « Enregistrer et partager » est désactivé. |
+| `DJANGO_ALLOWED_HOSTS` | Vos domaines en plus de `*.vercel.app`, séparés par des virgules. |
+| `DJANGO_CSRF_TRUSTED_ORIGINS` | Les mêmes domaines avec `https://`, si vous en ajoutez. |
+
+Après avoir ajouté `DATABASE_URL`, créez les tables une fois depuis votre machine :
+
+```bash
+vercel env pull .env.local
+set -a && . ./.env.local && set +a && uv run python manage.py migrate
+```

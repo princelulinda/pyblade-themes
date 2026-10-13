@@ -38,7 +38,9 @@
         <div class="mx-1 hidden h-5 w-px bg-border sm:block"></div>
         <pb-ui.button variant="ghost" size="sm" class="hidden sm:inline-flex" x-on:click="$dispatch('dialog-open', 'import')">{{ t.import_label }}</pb-ui.button>
         <pb-ui.button variant="outline" size="sm" x-on:click="openCode()">{{ t.code }}</pb-ui.button>
+        @if(data.sharing)
         <pb-ui.button size="sm" x-on:click="$dispatch('dialog-open', 'save')">{{ t.save }}</pb-ui.button>
+        @endif
         <div class="mx-1 hidden h-5 w-px bg-border sm:block"></div>
         <pb-ui.button-link :href="other_lang.href" variant="ghost" size="sm" class="w-10 font-mono text-xs">{{ other_lang.label }}</pb-ui.button-link>
         <pb-ui.mode-toggle class="size-8" />
