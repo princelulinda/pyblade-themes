@@ -1,0 +1,16 @@
+# How this project is put together. See https://docs.pyblade.com/configuration.
+[project]
+name = "pyblade-themes"
+pyblade_version = "0.3.0"
+
+[stack]
+framework = "django"
+css_framework = "tailwindcss"
+css_framework_version = "4"
+package_manager = "uv"
+js_package_manager = "npm"
+
+[paths]
+settings = "config/settings.py"
+templates = "templates"
+components = "components"

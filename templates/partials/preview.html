@@ -1,0 +1,202 @@
+{# The preview: real PyBlade UI components, restyled live by the editor's variables #}
+<div class="columns-1 gap-4 lg:columns-2 2xl:columns-3 [&>*]:mb-4 [&>*]:break-inside-avoid">
+
+    <pb-ui.card class="gap-2">
+      <pb-ui.card-header>
+        <pb-ui.card-description>{{ t.revenue }}</pb-ui.card-description>
+        <pb-ui.card-title class="text-3xl tabular-nums">{{ t.revenue_value }}</pb-ui.card-title>
+        <p class="text-xs text-muted-foreground">{{ t.revenue_delta }}</p>
+      </pb-ui.card-header>
+      <pb-ui.card-content>
+        <pb-ui.chart type="area" x="month" :data="revenue_series" :series="[{'key': 'this_year', 'label': t.this_year}, {'key': 'last_year', 'label': t.last_year}]" :height="180" :locale="locale" />
+      </pb-ui.card-content>
+    </pb-ui.card>
+
+    <pb-ui.card>
+      <pb-ui.card-header>
+        <pb-ui.card-title>{{ t.create_account }}</pb-ui.card-title>
+        <pb-ui.card-description>{{ t.create_account_desc }}</pb-ui.card-description>
+      </pb-ui.card-header>
+      <pb-ui.card-content class="grid gap-4">
+        <div class="grid grid-cols-2 gap-3">
+          <pb-ui.button variant="outline">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.38-5.26 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></svg>
+            GitHub
+          </pb-ui.button>
+          <pb-ui.button variant="outline">Google</pb-ui.button>
+        </div>
+        <pb-ui.field>
+          <pb-ui.field-label for="email">{{ t.email }}</pb-ui.field-label>
+          <pb-ui.input id="email" type="email" placeholder="ada@example.com" />
+        </pb-ui.field>
+        <pb-ui.field>
+          <pb-ui.field-label for="password">{{ t.password }}</pb-ui.field-label>
+          <pb-ui.input id="password" type="password" />
+        </pb-ui.field>
+        <pb-ui.field>
+          <pb-ui.field-label for="plan">{{ t.plan }}</pb-ui.field-label>
+          <pb-ui.select id="plan">
+            @for(p in t.plans)<option>{{ p }}</option>@endfor
+          </pb-ui.select>
+        </pb-ui.field>
+        <label class="flex items-center gap-2 text-sm"><pb-ui.checkbox checked /> {{ t.terms }}</label>
+      </pb-ui.card-content>
+      <pb-ui.card-footer><pb-ui.button class="w-full">{{ t.create }}</pb-ui.button></pb-ui.card-footer>
+    </pb-ui.card>
+
+    <pb-ui.card class="items-center">
+      <pb-ui.calendar :locale="t.calendar_locale" :week_start="t.week_start" value="2026-10-13" />
+    </pb-ui.card>
+
+    <pb-ui.card class="gap-2">
+      <pb-ui.card-header>
+        <pb-ui.card-description>{{ t.subscriptions }}</pb-ui.card-description>
+        <pb-ui.card-title class="text-3xl tabular-nums">{{ t.subscriptions_value }}</pb-ui.card-title>
+        <p class="text-xs text-muted-foreground">{{ t.subscriptions_delta }}</p>
+      </pb-ui.card-header>
+      <pb-ui.card-content>
+        <pb-ui.chart type="bar" x="month" :data="revenue_series" :series="[{'key': 'last_year', 'label': t.subscriptions}]" :height="160" :legend="False" :grid="False" :locale="locale" />
+      </pb-ui.card-content>
+    </pb-ui.card>
+
+    <pb-ui.card>
+      <pb-ui.card-header>
+        <pb-ui.card-title>{{ t.team }}</pb-ui.card-title>
+        <pb-ui.card-description>{{ t.team_desc }}</pb-ui.card-description>
+      </pb-ui.card-header>
+      <pb-ui.card-content>
+        <pb-ui.item-group class="gap-4">
+          @for(m in members)
+          <div class="flex items-center gap-3">
+            <pb-ui.avatar :fallback="m.initials" class="size-9" />
+            <div class="min-w-0 flex-1">
+              <div class="truncate text-sm font-medium">{{ m.name }}</div>
+              <div class="truncate text-xs text-muted-foreground">{{ m.email }}</div>
+            </div>
+            <pb-ui.badge variant="secondary">{{ m.role }}</pb-ui.badge>
+          </div>
+          @endfor
+        </pb-ui.item-group>
+      </pb-ui.card-content>
+      <pb-ui.card-footer class="gap-2">
+        <pb-ui.input placeholder="colleague@example.com" />
+        <pb-ui.button variant="secondary">{{ t.invite }}</pb-ui.button>
+      </pb-ui.card-footer>
+    </pb-ui.card>
+
+
+    <pb-ui.card>
+      <pb-ui.card-header>
+        <pb-ui.card-title>{{ t.settings }}</pb-ui.card-title>
+        <pb-ui.card-description>{{ t.settings_desc }}</pb-ui.card-description>
+      </pb-ui.card-header>
+      <pb-ui.card-content class="grid gap-3">
+        @for(n in [{'id': 'activity', 'title': t.notif_activity, 'desc': t.notif_activity_desc, 'on': True}, {'id': 'marketing', 'title': t.notif_marketing, 'desc': t.notif_marketing_desc, 'on': False}, {'id': 'security', 'title': t.notif_security, 'desc': t.notif_security_desc, 'on': True}])
+        <div class="flex items-center justify-between gap-4 rounded-lg border p-3">
+          <div class="space-y-0.5">
+            <pb-ui.label :for="n.id">{{ n.title }}</pb-ui.label>
+            <p class="text-xs text-muted-foreground">{{ n.desc }}</p>
+          </div>
+          @if(n.on)<pb-ui.switch :id="n.id" checked />@else<pb-ui.switch :id="n.id" />@endif
+        </div>
+        @endfor
+      </pb-ui.card-content>
+    </pb-ui.card>
+
+    <pb-ui.card>
+      <pb-ui.card-header>
+        <pb-ui.card-title>{{ t.goal }}</pb-ui.card-title>
+        <pb-ui.card-description>{{ t.goal_desc }}</pb-ui.card-description>
+      </pb-ui.card-header>
+      <pb-ui.card-content x-data="{ goal: 350 }">
+        <div class="flex items-center justify-center gap-6">
+          <pb-ui.button variant="outline" size="icon" class="rounded-full" x-on:click="goal = Math.max(200, goal - 10)" aria-label="−">−</pb-ui.button>
+          <div class="text-center">
+            <div class="text-6xl font-bold tracking-tighter tabular-nums" x-text="goal">350</div>
+            <div class="text-xs text-muted-foreground uppercase">{{ t.calories }}</div>
+          </div>
+          <pb-ui.button variant="outline" size="icon" class="rounded-full" x-on:click="goal = Math.min(500, goal + 10)" aria-label="+">+</pb-ui.button>
+        </div>
+        <div class="mt-6 flex h-20 items-end gap-1.5">
+          @for(h in [40, 64, 52, 80, 70, 92, 58, 76, 66, 88, 72, 60])
+          <div class="flex-1 rounded-t-sm bg-primary" style="height: {{ h }}%; opacity: {{ h / 100 }}"></div>
+          @endfor
+        </div>
+      </pb-ui.card-content>
+      <pb-ui.card-footer><pb-ui.button class="w-full" variant="secondary">{{ t.set_goal }}</pb-ui.button></pb-ui.card-footer>
+    </pb-ui.card>
+
+    <pb-ui.card>
+      <pb-ui.card-content>
+        <pb-ui.tabs value="account">
+          <pb-ui.tabs-list class="w-full">
+            <pb-ui.tabs-trigger value="account">{{ t.tabs[0] }}</pb-ui.tabs-trigger>
+            <pb-ui.tabs-trigger value="password">{{ t.tabs[1] }}</pb-ui.tabs-trigger>
+          </pb-ui.tabs-list>
+          <pb-ui.tabs-content value="account" class="grid gap-3 pt-2">
+            <p class="text-sm text-muted-foreground">{{ t.tab_account }}</p>
+            <pb-ui.field><pb-ui.field-label for="name">{{ t.name }}</pb-ui.field-label><pb-ui.input id="name" value="Ada Lovelace" /></pb-ui.field>
+            <pb-ui.button class="w-fit">{{ t.save }}</pb-ui.button>
+          </pb-ui.tabs-content>
+          <pb-ui.tabs-content value="password" class="grid gap-3 pt-2">
+            <p class="text-sm text-muted-foreground">{{ t.tab_password }}</p>
+            <pb-ui.input type="password" placeholder="••••••••" />
+            <pb-ui.button class="w-fit">{{ t.save }}</pb-ui.button>
+          </pb-ui.tabs-content>
+        </pb-ui.tabs>
+      </pb-ui.card-content>
+    </pb-ui.card>
+
+    <pb-ui.card>
+      <pb-ui.card-header><pb-ui.card-title>{{ t.buttons }}</pb-ui.card-title></pb-ui.card-header>
+      <pb-ui.card-content class="grid gap-5">
+        <pb-ui.alert>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+          <pb-ui.alert-title>{{ t.alert_title }}</pb-ui.alert-title>
+          <pb-ui.alert-description>{{ t.alert_desc }}</pb-ui.alert-description>
+        </pb-ui.alert>
+        <div class="flex flex-wrap gap-2">
+          <pb-ui.button size="sm">{{ t.button_labels[0] }}</pb-ui.button>
+          <pb-ui.button size="sm" variant="secondary">{{ t.button_labels[1] }}</pb-ui.button>
+          <pb-ui.button size="sm" variant="outline">{{ t.button_labels[2] }}</pb-ui.button>
+          <pb-ui.button size="sm" variant="ghost">{{ t.button_labels[3] }}</pb-ui.button>
+          <pb-ui.button size="sm" variant="destructive">{{ t.button_labels[4] }}</pb-ui.button>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <pb-ui.badge>{{ t.badge_labels[0] }}</pb-ui.badge>
+          <pb-ui.badge variant="secondary">{{ t.badge_labels[1] }}</pb-ui.badge>
+          <pb-ui.badge variant="success">{{ t.badge_labels[2] }}</pb-ui.badge>
+          <pb-ui.badge variant="outline">{{ t.badge_labels[3] }}</pb-ui.badge>
+        </div>
+        <div class="space-y-2">
+          <div class="flex justify-between text-sm"><span class="font-medium">{{ t.storage }}</span><span class="text-muted-foreground">{{ t.storage_desc }}</span></div>
+          <pb-ui.progress :value="82" />
+        </div>
+        <pb-ui.slider min="0" max="100" value="40" />
+        <div class="flex flex-wrap gap-2">
+          <pb-ui.dialog name="demo">
+            <pb-slot:trigger><pb-ui.button variant="outline" size="sm">{{ t.dialog_open }}</pb-ui.button></pb-slot:trigger>
+            <pb-ui.dialog-header>
+              <pb-ui.dialog-title>{{ t.dialog_title }}</pb-ui.dialog-title>
+              <pb-ui.dialog-description>{{ t.dialog_desc }}</pb-ui.dialog-description>
+            </pb-ui.dialog-header>
+            <pb-ui.dialog-footer>
+              <pb-ui.dialog-close><pb-ui.button variant="outline">{{ t.cancel }}</pb-ui.button></pb-ui.dialog-close>
+              <pb-ui.dialog-close><pb-ui.button variant="destructive">{{ t.delete }}</pb-ui.button></pb-ui.dialog-close>
+            </pb-ui.dialog-footer>
+          </pb-ui.dialog>
+          <pb-ui.button variant="outline" size="sm" x-on:click="toast({ title: theme.base + ' · ' + theme.color + ' · ' + theme.radius, variant: 'success' })">{{ t.toast }}</pb-ui.button>
+        </div>
+      </pb-ui.card-content>
+    </pb-ui.card>
+  </div>
+
+  <pb-ui.card class="mt-4">
+    <pb-ui.card-header>
+      <pb-ui.card-title>{{ t.payments }}</pb-ui.card-title>
+      <pb-ui.card-description>{{ t.payments_desc }}</pb-ui.card-description>
+    </pb-ui.card-header>
+    <pb-ui.card-content>
+      <pb-ui.data-table :rows="payments" :columns="payment_columns" selectable search="email" :search_placeholder="t.filter" :page_size="5" :locale="locale" :currency="currency" />
+    </pb-ui.card-content>
+  </pb-ui.card>

@@ -1,0 +1,11 @@
+@import "tailwindcss";
+@import "./theme.css";
+
+/* Where Tailwind looks for the classes you use. */
+@source "../../templates";
+@source "../../components";
+
+@theme {
+  --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, monospace;
+}
